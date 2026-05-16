@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Группа "Бусинки" | Умка</title>
+    <style>
+        /* --- НАСТРОЙКИ ДИЗАЙНА --- */
+        :root {
+            --primary: #FF9F43;   /* Оранжевый */
+            --blue: #54a0ff;      /* Голубой */
+            --pink: #ff6b6b;      /* Розовый */
+            --green: #2ed573;     /* Зеленый */
+            --bg: #fffdf5;        /* Фон страницы */
+            --text: #2f3542;      /* Цвет текста */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+        }
+
+        /* --- ЭКРАН ВХОДА (ТЕМАТИЧЕСКИЙ) --- */
+        #login-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .bg-decor {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.3;
+            animation: float 6s infinite ease-in-out;
+            pointer-events: none;
+        }
+        .d1 { top: 10%; left: 10%; animation-delay: 0s; }
+        .d2 { top: 20%; right: 15%; animation-delay: 1s; font-size: 3rem; }
+        .d3 { bottom: 15%; left: 20%; animation-delay: 2s; }
+        .d4 { bottom: 10%; right: 10%; animation-delay: 3s; font-size: 2.5rem; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 30px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 85%;
+            max-width: 350px;
+            position: relative;
+            z-index: 10;
+            border: 4px solid white;
+        }
+
+        .umka-icon {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            display: block;
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
+            animation: wiggle 3s infinite;
+        }
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .login-title {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            color: var(--blue);
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        
+        .login-subtitle {
+            color: #747d8c;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .pass-input {
+            width: 80%; padding: 12px; font-size: 18px;
+            border: 2px solid #dfe4ea; border-radius: 15px;
+            text-align: center; margin: 15px 0;
+            outline: none; transition: 0.3s;
+        }
+        .pass-input:focus { border-color: var(--blue); box-shadow: 0 0 8px rgba(84, 160, 255, 0.3); }
+
+        .enter-btn {
+            background: linear-gradient(to right, var(--primary), #ff7f50);
+            color: white;
+            border: none; padding: 12px 30px; font-size: 18px;
+            border-radius: 20px; cursor: pointer; width: 100%;
+            font-weight: bold; box-shadow: 0 5px 15px rgba(255, 159, 67, 0.4);
+            transition: transform 0.2s;
+        }
+        .enter-btn:hover { transform: scale(1.05); }
+
+        /* --- ОСНОВНОЙ САЙТ --- */
+        #site-content { display: none; } 
+
+        /* --- УКРАШЕННАЯ ШАПКА --- */
+        header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            box-shadow: 0 10px 20px rgba(84, 160, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Декор в шапке */
+        .header-decor {
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.2;
+            animation: floatHeader 4s infinite ease-in-out;
+        }
+        .h-left { top: 10px; left: 20px; }
+        .h-right { bottom: 10px; right: 20px; animation-delay: 2s; }
+
+        @keyframes floatHeader {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.1); }
+        }
+
+        .site-title {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            font-size: 2.2rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        .group-badge {
+            background: white;
+            color: var(--primary);
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 50px;
+            margin-top: 15px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid rgba(255,255,255,0.5);
+            position: relative;
+            z-index: 2;
+            animation: popIn 0.8s ease-out;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+
+        section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            color: var(--blue);
+            border-bottom: 2px dashed var(--primary);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        /* Блок Приветствия */
+        .welcome-block { text-align: center; }
+        .welcome-block h1 { color: var(--primary); margin-bottom: 10px; }
+
+        /* Расписание */
+        ul.schedule-list { list-style: none; padding: 0; }
+        ul.schedule-list li {
+            padding: 12px; border-bottom: 1px solid #eee;
+            display: flex; justify-content: space-between;
+        }
+        ul.schedule-list li span:first-child { font-weight: bold; color: var(--blue); margin-right: 10px;}
+
+        /* Новости с фото */
+        .news-item {
+            border-left: 4px solid var(--pink);
+            background: #ffeaa7;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        .news-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-top: 10px;
+            background-color: #eee;
+        }
+        .news-date { font-weight: bold; color: var(--pink); font-size: 0.9rem; }
+
+        /* Сетки (Люди и Галерея) */
+        .people-grid, .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            text-align: center;
+        }
+        .person-card img, .gallery-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid var(--primary);
+            background-color: #eee;
+        }
+        .person-name { font-weight: bold; margin-top: 5px; display: block; font-size: 0.9rem;}
+
+        /* Кнопки модальных окон */
+        .modal-btn {
+            background: linear-gradient(to right, #ff9ff3, #feca57);
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(255, 159, 243, 0.4);
+            transition: transform 0.2s;
+            margin-bottom: 10px;
+        }
+        .modal-btn.blue { background: linear-gradient(to right, #54a0ff, #2e86de); box-shadow: 0 4px 10px rgba(84, 160, 255, 0.4); }
+        .modal-btn:active { transform: scale(0.98); }
+
+        /* Модальное окно */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 10000; 
+            left: 0; top: 0; 
+            width: 100%; height: 100%; 
+            background-color: rgba(0,0,0,0.6); 
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+        .close:hover { color: black; }
+
+        /* Финансы */
+        .finance-card {
+            background: #f1f2f6;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .finance-amount {
+            font-size: 2rem;
+            color: var(--primary);
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .status-open { background-color: #dff9fb; color: var(--blue); }
+        .status-closed { background-color: #ffcccc; color: var(--pink); }
+        
+        .copy-btn {
+            background: var(--blue); color: white; border: none;
+            padding: 10px; width: 100%; border-radius: 8px;
+            cursor: pointer; margin-top: 10px; font-size: 1rem;
+        }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { text-align: left; padding: 10px; border-bottom: 1px solid #eee; }
+        .plus { color: var(--green); font-weight: bold; }
+        .minus { color: var(--pink); font-weight: bold; }
+        .balance-row { background-color: #fff3cd; font-weight: bold; }
+
+        footer { text-align: center; padding: 20px; color: gray; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <!-- 1. ЭКРАН ВХОДА -->
+    <div id="login-overlay">
+        <div class="bg-decor d1">🐾</div>
+        <div class="bg-decor d2">⭐</div>
+        <div class="bg-decor d3">🍯</div>
+        <div class="bg-decor d4">🐾</div>
+
+        <div class="login-box">
+            <span class="umka-icon">🐻</span>
+            <h2 class="login-title">Умка</h2>
+            <p class="login-subtitle">Группа №3 "Бусинки"</p>
+            
+            <input type="password" id="passwordInput" class="pass-input" placeholder="Введите код">
+            <button class="enter-btn" onclick="checkPassword()">Войти в группу</button>
+            <p id="errorMsg" style="color:red; display:none; margin-top:10px; font-size:0.9rem;">Неверный код!</p>
+        </div>
+    </div>
+
+    <!-- 2. ОСНОВНОЙ САЙТ -->
+    <div id="site-content">
+        
+        <!-- УКРАШЕННАЯ ШАПКА -->
+        <header>
+            <div class="header-decor h-left">🎈</div>
+            <div class="header-decor h-right">✨</div>
+            
+            <h1 class="site-title">🧸 Детский сад "Умка"</h1>
+            <div class="group-badge">Группа №3 "Бусинки" 💎</div>
+        </header>
+
+        <div class="container">
+
+            <!-- БЛОК 1: ПРИВЕТСТВИЕ -->
+            <section class="welcome-block">
+                <h1>Добро пожаловать! 👋</h1>
+                <p>Страничка нашей дружной группы.</p>
+            </section>
+
+            <!-- БЛОК 2: РАСПИСАНИЕ -->
+            <section id="schedule">
+                <h2>📅 Наш день</h2>
+                <ul class="schedule-list">
+                    <li><span>08:00</span> <span>Прием детей</span></li>
+                    <li><span>09:00</span> <span>Завтрак</span></li>
+                    <li><span>10:00</span> <span>Занятия</span></li>
+                    <li><span>11:00</span> <span>Прогулка</span></li>
+                    <li><span>13:00</span> <span>Обед и сон</span></li>
+                </ul>
+            </section>
+
+            <!-- БЛОК 3: НОВОСТИ -->
+            <section id="news">
+                <h2>📢 Новости и информация</h2>
+                <div class="news-item">
+                    <div class="news-date">20 Мая 2026</div>
+                    <strong>Подготовка к утреннику!</strong>
+                    <p>Проверьте наличие белых носочков.</p>
+                    <img src="https://via.placeholder.com/600x300/ff9ff3/ffffff?text=Фото+с+репетиции" class="news-img" alt="Новость">
+                </div>
+            </section>
+
+            <!-- БЛОК 4: ВОСПИТАТЕЛИ -->
+            <section id="teachers">
+                <h2>👩‍🏫 Наши воспитатели</h2>
+                <div class="people-grid">
+                    <div class="person-card"><img src="https://via.placeholder.com/100" alt="Фото"><span class="person-name">Мария Ивановна</span></div>
+                    <div class="person-card"><img src="https://via.placeholder.com/100" alt="Фото"><span class="person-name">Елена Сергеевна</span></div>
+                </div>
+            </section>
+
+            <!-- БЛОК 5: ВОСПИТАННИКИ -->
+            <section id="kids">
+                <h2>👶 Наши воспитанники</h2>
+                <div class="people-grid">
+                    <div class="person-card"><img src="https://via.placeholder.com/100/FF9F43/ffffff?text=А"><span class="person-name">Аня</span></div>
+                    <div class="person-card"><img src="https://via.placeholder.com/100/54a0ff/ffffff?text=Д"><span class="person-name">Дима</span></div>
+                    <div class="person-card"><img src="https://via.placeholder.com/100/ff6b6b/ffffff?text=С"><span class="person-name">Соня</span></div>
+                    <div class="person-card"><img src="https://via.placeholder.com/100/2ed573/ffffff?text=М"><span class="person-name">Максим</span></div>
+                </div>
+                <button class="modal-btn blue" style="margin-top: 20px;" onclick="openModal('kidsModal')">👨‍👩‍👧‍👦 Посмотреть всех детей (25 чел.)</button>
+            </section>
+
+            <!-- БЛОК 6: ДНИ РОЖДЕНИЯ -->
+            <section>
+                <h2>🎉 Праздники</h2>
+                <button class="modal-btn" onclick="openModal('birthdayModal')">🎂 Посмотреть именинников</button>
+            </section>
+
+            <!-- БЛОК 7: ГАЛЕРЕЯ -->
+            <section id="gallery">
+                <h2>📸 Галерея</h2>
+                <div class="gallery-grid">
+                    <div class="gallery-item"><img src="https://via.placeholder.com/200/ff9ff3/ffffff?text=Фото+1"></div>
+                    <div class="gallery-item"><img src="https://via.placeholder.com/200/54a0ff/ffffff?text=Фото+2"></div>
+                    <div class="gallery-item"><img src="https://via.placeholder.com/200/2ed573/ffffff?text=Фото+3"></div>
+                    <div class="gallery-item"><img src="https://via.placeholder.com/200/ffa502/ffffff?text=Фото+4"></div>
+                </div>
+            </section>
+
+            <!-- БЛОК 8: ФИНАНСЫ -->
+            <section id="money">
+                <h2>💰 Финансы группы</h2>
+                
+                <div class="finance-card">
+                    <h3 style="margin:0; color:#57606f;">Текущий сбор</h3>
+                    <div class="finance-amount">500 ₽</div>
+                    <p style="margin:5px 0;">На подарки к 1 Сентября</p>
+                    
+                    <div style="margin-top: 15px; font-size: 0.9rem; color: #57606f;">
+                        📅 от 15.05.2026<br>
+                        <span class="status-badge status-open">🟢 Статус: Открыт</span>
+                    </div>
+
+                    <hr style="border:0; border-top:1px solid #ccc; margin:15px 0;">
+                    <p style="font-family:monospace; font-size:1.2em;">+7 (999) 000-00-00</p>
+                    <p style="font-size:0.9em; color:gray;">Сбер / Т-Банк • Ольга В.</p>
+                    <button class="copy-btn" onclick="copyNum()">📋 Скопировать номер</button>
+                </div>
+
+                <button class="modal-btn blue" onclick="openModal('payersModal')">✅ Список сдавших (Кто сдал)</button>
+
+                <h3 style="margin-top:25px; color:var(--blue);">📊 Приход и Расход</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Дата</th>
+                            <th>Описание</th>
+                            <th>Сумма</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>01.09</td>
+                            <td>Сбор "1 Сентября"</td>
+                            <td class="plus">+ 15 000 ₽</td>
+                        </tr>
+                        <tr>
+                            <td>05.09</td>
+                            <td>Канцелярия</td>
+                            <td class="minus">- 2 300 ₽</td>
+                        </tr>
+                        <tr>
+                            <td>10.09</td>
+                            <td>Подарки детям</td>
+                            <td class="minus">- 5 000 ₽</td>
+                        </tr>
+                        <tr class="balance-row">
+                            <td colspan="2" style="text-align:right;">Остаток в кассе:</td>
+                            <td>7 700 ₽</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+        </div>
+
+        <footer>© 2026 Группа "Бусинки"</footer>
+    </div>
+
+    <!-- МОДАЛЬНЫЕ ОКНА (ВСЕ ДЕТИ, ДР, ФИНАНСЫ) -->
+    <div id="kidsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('kidsModal')">&times;</span>
+            <h2 style="border:none;">👨‍👩‍👧‍👦 Все наши детки</h2>
+            <div class="people-grid">
+                <div class="person-card"><img src="https://via.placeholder.com/100/FF9F43/ffffff?text=1"><span class="person-name">Аня К.</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/54a0ff/ffffff?text=2"><span class="person-name">Дима И.</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/ff6b6b/ffffff?text=3"><span class="person-name">Соня М.</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/2ed573/ffffff?text=4"><span class="person-name">Максим В.</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/a29bfe/ffffff?text=5"><span class="person-name">Ребенок 5</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/fd79a8/ffffff?text=6"><span class="person-name">Ребенок 6</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/fab1a0/ffffff?text=7"><span class="person-name">Ребенок 7</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/74b9ff/ffffff?text=8"><span class="person-name">Ребенок 8</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/55efc4/ffffff?text=9"><span class="person-name">Ребенок 9</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/ffeaa7/ffffff?text=10"><span class="person-name">Ребенок 10</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/dfe6e9/ffffff?text=11"><span class="person-name">Ребенок 11</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/b2bec3/ffffff?text=12"><span class="person-name">Ребенок 12</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/FF9F43/ffffff?text=13"><span class="person-name">Ребенок 13</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/54a0ff/ffffff?text=14"><span class="person-name">Ребенок 14</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/ff6b6b/ffffff?text=15"><span class="person-name">Ребенок 15</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/2ed573/ffffff?text=16"><span class="person-name">Ребенок 16</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/a29bfe/ffffff?text=17"><span class="person-name">Ребенок 17</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/fd79a8/ffffff?text=18"><span class="person-name">Ребенок 18</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/fab1a0/ffffff?text=19"><span class="person-name">Ребенок 19</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/74b9ff/ffffff?text=20"><span class="person-name">Ребенок 20</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/55efc4/ffffff?text=21"><span class="person-name">Ребенок 21</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/ffeaa7/ffffff?text=22"><span class="person-name">Ребенок 22</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/dfe6e9/ffffff?text=23"><span class="person-name">Ребенок 23</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/b2bec3/ffffff?text=24"><span class="person-name">Ребенок 24</span></div>
+                <div class="person-card"><img src="https://via.placeholder.com/100/636e72/ffffff?text=25"><span class="person-name">Ребенок 25</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="birthdayModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('birthdayModal')">&times;</span>
+            <h2 style="border:none;">🎂 Наши именинники</h2>
+            <ul style="list-style:none; padding:0; text-align:left;">
+                <li style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">
+                    <span>👧 Аня К.</span> <span style="color:var(--primary); font-weight:bold;">12 Июня</span>
+                </li>
+                <li style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">
+                    <span>👦 Дима И.</span> <span style="color:var(--primary); font-weight:bold;">5 Сентября</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="payersModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('payersModal')">&times;</span>
+            <h2 style="border:none;">✅ Кто сдал деньги</h2>
+            <p style="color:gray; font-size:0.9rem;">На сбор "1 Сентября"</p>
+            <table>
+                <thead>
+                    <tr><th>Имя ребенка</th><th>Сумма</th><th>Статус</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Аня К.</td><td>500 ₽</td><td style="color:green; font-weight:bold;">✅</td></tr>
+                    <tr><td>Дима И.</td><td>500 ₽</td><td style="color:green; font-weight:bold;">✅</td></tr>
+                    <tr><td>Соня М.</td><td>-</td><td style="color:gray;">⬜</td></tr>
+                    <tr><td>Максим В.</td><td>500 ₽</td><td style="color:green; font-weight:bold;">✅</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const SITE_PASSWORD = "businki"; 
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value;
+            if (input === SITE_PASSWORD) {
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('site-content').style.display = 'block';
+            } else {
+                document.getElementById('errorMsg').style.display = 'block';
+            }
+        }
+        document.getElementById("passwordInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") checkPassword();
+        });
+
+        function openModal(id) { document.getElementById(id).style.display = 'block'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) { event.target.style.display = 'none'; }
+        }
+        function copyNum() { navigator.clipboard.writeText("+79990000000"); alert("Номер скопирован!"); }
+    </script>
+</body>
+</html>
